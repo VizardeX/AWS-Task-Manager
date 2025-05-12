@@ -1,5 +1,3 @@
-// dynamo.js
-
 const AWS = require("aws-sdk");
 
 // Initialize DynamoDB DocumentClient
