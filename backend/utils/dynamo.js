@@ -33,9 +33,9 @@ exports.putItem = async (tableName, item) => {
 exports.updateItem = async (tableName, task_id, updates) => {
   // Build the UpdateExpression and ExpressionAttributeValues
   const updateKeys = Object.keys(updates);
-  const updateExpressions = updateKeys.map((key, i) => `#field${i} = :value${i}`);
-  const expressionAttributeNames = {};
-  const expressionAttributeValues = {};
+  const updateExpressions = updateKeys.map((key, i) => `#field${i} = :value${i}`); // tells DynamoDB what fields to change
+  const expressionAttributeNames = {}; // tells DynamoDB what the field names are to avoid reserved word collisions
+  const expressionAttributeValues = {}; // tells DynamoDB what the new values are
 
   updateKeys.forEach((key, i) => {
     expressionAttributeNames[`#field${i}`] = key;
