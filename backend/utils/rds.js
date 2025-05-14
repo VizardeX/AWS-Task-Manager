@@ -26,3 +26,19 @@ exports.insertTaskRelation = async (sql, values) => {
     throw new Error("Failed to insert task relation into RDS");
   }
 };
+
+/**
+ * Deletes a task-user relationship from RDS.
+ * @param {string} sql - The DELETE SQL query
+ * @param {Array} values - Query parameters (e.g., [task_id])
+ */
+exports.deleteRelation = async (sql, values) => {
+  try {
+    const [result] = await pool.execute(sql, values);
+    console.log("Deleted task-user relation from RDS");
+    return result;
+  } catch (error) {
+    console.error("RDS deleteRelation error:", error);
+    throw new Error("Failed to delete relation from RDS");
+  }
+};

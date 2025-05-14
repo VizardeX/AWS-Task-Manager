@@ -60,3 +60,25 @@ exports.updateItem = async (tableName, task_id, updates) => {
     throw new Error("Failed to update item in DynamoDB");
   }
 };
+
+/**
+ * Deletes a task from DynamoDB by task_id and returns the deleted item.
+ * @param {string} tableName - The name of the DynamoDB table
+ * @param {string} task_id - The ID of the task to delete
+ */
+exports.deleteItem = async (tableName, task_id) => {
+  const params = {
+    TableName: tableName,
+    Key: { task_id },
+    ReturnValues: "ALL_OLD", // Returns the deleted item
+  };
+
+  try {
+    const result = await dynamo.delete(params).promise();
+    console.log("Deleted item from DynamoDB:", result.Attributes);
+    return result.Attributes;
+  } catch (error) {
+    console.error("DynamoDB deleteItem error:", error);
+    throw new Error("Failed to delete item from DynamoDB");
+  }
+};
