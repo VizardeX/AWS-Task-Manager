@@ -1,25 +1,21 @@
-const mysql = require("mysql2/promise"); // or replace with 'pg' if you're using PostgreSQL
+const { Pool } = require("pg");
 
-// Create a connection pool (reuse across calls)
-// IMPORTANT: Replace with your actual RDS credentials and config
-const pool = mysql.createPool({
+const pool = new Pool({
   host: process.env.RDS_HOST,
+  port: process.env.RDS_PORT || 5432,
   user: process.env.RDS_USER,
   password: process.env.RDS_PASSWORD,
   database: process.env.RDS_DB,
-  waitForConnections: true,
-  connectionLimit: 5,
 });
 
 /**
- * Insert a task-user relationship into the RDS database.
- * @param {string} sql - The SQL query string
- * @param {Array} values - Parameterized values (e.g., [task_id, user_id])
+ * Executes a SQL query (INSERT, DELETE, etc.).
+ * @param {string} sql - The SQL statement
+ * @param {Array} values - The parameter values
  */
 exports.insertTaskRelation = async (sql, values) => {
   try {
-    const [result] = await pool.execute(sql, values);
-    console.log("Inserted task-user relation into RDS");
+    const result = await pool.query(sql, values);
     return result;
   } catch (error) {
     console.error("RDS insertTaskRelation error:", error);
@@ -27,18 +23,12 @@ exports.insertTaskRelation = async (sql, values) => {
   }
 };
 
-/**
- * Deletes a task-user relationship from RDS.
- * @param {string} sql - The DELETE SQL query
- * @param {Array} values - Query parameters (e.g., [task_id])
- */
 exports.deleteRelation = async (sql, values) => {
   try {
-    const [result] = await pool.execute(sql, values);
-    console.log("Deleted task-user relation from RDS");
+    const result = await pool.query(sql, values);
     return result;
   } catch (error) {
     console.error("RDS deleteRelation error:", error);
-    throw new Error("Failed to delete relation from RDS");
+    throw new Error("Failed to delete task relation from RDS");
   }
 };
