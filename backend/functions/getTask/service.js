@@ -6,7 +6,7 @@ const { getItem } = require("../../utils/dynamo");
  * @returns {Object|null} The task data or null if not found
  */
 exports.getTaskFromDynamo = async (task_id) => {
-  const tableName = "TasksTable"; // Replace with your actual table name
+  const tableName = process.env.DYNAMO_TABLE_NAME || "TaskMetadata";
 
   try {
     const task = await getItem(tableName, task_id);

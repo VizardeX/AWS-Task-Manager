@@ -8,7 +8,8 @@ const { sendToQueue } = require("../../utils/sqs");
  * @param {string} task_id - ID of the task to delete
  */
 exports.deleteTaskFromDynamo = async (task_id) => {
-  const tableName = "TasksTable"; // Replace with your actual table name
+
+  const tableName = process.env.DYNAMO_TABLE_NAME || "TaskMetadata";
 
   const deletedItem = await deleteItem(tableName, task_id);
   return deletedItem;

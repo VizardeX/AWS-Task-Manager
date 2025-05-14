@@ -7,7 +7,7 @@ const { sendToQueue } = require("../../utils/sqs");
  * @param {Object} updates - Key-value pairs of fields to update
  */
 exports.updateTaskInDynamo = async (task_id, updates) => {
-  const tableName = "TasksTable"; // Replace with your actual DynamoDB table name
+  const tableName = process.env.DYNAMO_TABLE_NAME || "TaskMetadata";
 
   try {
     const result = await updateItem(tableName, task_id, updates);

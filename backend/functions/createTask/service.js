@@ -8,7 +8,8 @@ const { sendToQueue } = require("../../utils/sqs");
  * @param {Object} taskMetadata - The full task details
  */
 exports.saveTaskToDynamo = async (taskMetadata) => {
-  return await putItem("TasksTable", taskMetadata); // Adjust table name as needed
+  const tableName = process.env.DYNAMO_TABLE_NAME || "TaskMetadata";
+  return await putItem(tableName, taskMetadata); // Adjust table name as needed
 };
 
 /**

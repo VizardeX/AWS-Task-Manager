@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const { handleGetTask } = require("./controller");
 
 //Triggered by API Gateway (GET /tasks/{id})

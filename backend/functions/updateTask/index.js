@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const { handleUpdateTask } = require("./controller");
 
 //Lambda handler for updating a task.
