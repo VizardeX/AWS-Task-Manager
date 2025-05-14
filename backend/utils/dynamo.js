@@ -82,3 +82,26 @@ exports.deleteItem = async (tableName, task_id) => {
     throw new Error("Failed to delete item from DynamoDB");
   }
 };
+
+/**
+ * Retrieves a task from DynamoDB by task_id.
+ * @param {string} tableName - The name of the DynamoDB table
+ * @param {string} task_id - The ID of the task to retrieve
+ * @returns {Object|null} The task item or null if not found
+ */
+exports.getItem = async (tableName, task_id) => {
+  const params = {
+    TableName: tableName,
+    Key: { task_id },
+  };
+
+  try {
+    const result = await dynamo.get(params).promise();
+    console.log("Retrieved item from DynamoDB:", result.Item);
+    return result.Item || null;
+  } catch (error) {
+    console.error("DynamoDB getItem error:", error);
+    throw new Error("Failed to retrieve item from DynamoDB");
+  }
+};
+
