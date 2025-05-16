@@ -22,3 +22,5 @@ exports.sendToQueue = async (queueUrl, message) => {
     throw new Error("Failed to send message to SQS");
   }
 };
+
+

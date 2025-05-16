@@ -26,3 +26,24 @@ exports.putObject = async (bucketName, key, base64Content) => {
     throw new Error("Failed to upload file to S3");
   }
 };
+
+/**
+ * Deletes an object from S3.
+ * @param {string} bucketName - S3 bucket name
+ * @param {string} key - Object key to delete
+ */
+exports.deleteObject = async (bucketName, key) => {
+  const params = {
+    Bucket: bucketName,
+    Key: key,
+  };
+
+  try {
+    await s3.deleteObject(params).promise();
+    console.log(`Deleted file from S3: ${key}`);
+  } catch (error) {
+    console.error("S3 deleteObject error:", error);
+    throw new Error("Failed to delete file from S3");
+  }
+};
+

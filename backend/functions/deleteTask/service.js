@@ -20,7 +20,7 @@ exports.deleteTaskFromDynamo = async (task_id) => {
  * @param {string} task_id - ID of the task to remove from RDS
  */
 exports.deleteTaskFromRDS = async (task_id) => {
-  const sql = `DELETE FROM task_user WHERE task_id = ?`;
+  const sql = `DELETE FROM task_user WHERE task_id = $1`;
   await deleteRelation(sql, [task_id]);
 };
 
@@ -31,10 +31,10 @@ exports.deleteTaskFromRDS = async (task_id) => {
 exports.deleteAttachmentFromS3 = async (attachmentUrl) => {
   // Extract bucket and key from the URL
   const url = new URL(attachmentUrl);
-  const bucketName = url.hostname.split(".")[0]; // e.g., your-bucket-name
   const key = decodeURIComponent(url.pathname.slice(1)); // remove leading slash
+  const bucket = process.env.S3_BUCKET_NAME || "task-attachments-bucket1";
 
-  await deleteObject(bucketName, key);
+  await deleteObject(bucket, key);
 };
 
 /**
@@ -42,6 +42,5 @@ exports.deleteAttachmentFromS3 = async (attachmentUrl) => {
  * @param {Object} message - Message payload
  */
 exports.sendMessageToQueue = async (message) => {
-  const queueUrl = "https://sqs.us-east-1.amazonaws.com/123456789012/YourQueue"; // Replace as needed
-  return await sendToQueue(queueUrl, message);
+  return await sendToQueue(process.env.SQS_QUEUE_URL, message);
 };
