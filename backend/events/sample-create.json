@@ -1,0 +1,3 @@
+{
+  "body": "{\"title\": \"Task with file\", \"user_id\": \"user-001\", \"file\": {\"name\": \"hello.txt\", \"content\": \"SGVsbG8gd29ybGQh\"}}"
+}

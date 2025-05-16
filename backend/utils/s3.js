@@ -1,5 +1,3 @@
-// s3.js
-
 const AWS = require("aws-sdk");
 
 const s3 = new AWS.S3();
@@ -17,7 +15,6 @@ exports.putObject = async (bucketName, key, base64Content) => {
     Bucket: bucketName,
     Key: key,
     Body: buffer,
-    ACL: "public-read", // or "private" based on your use case
   };
 
   try {

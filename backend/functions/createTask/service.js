@@ -9,7 +9,7 @@ const { sendToQueue } = require("../../utils/sqs");
  */
 exports.saveTaskToDynamo = async (taskMetadata) => {
   const tableName = process.env.DYNAMO_TABLE_NAME || "TaskMetadata";
-  return await putItem(tableName, taskMetadata); // Adjust table name as needed
+  return await putItem(tableName, taskMetadata); // 
 };
 
 /**
@@ -18,7 +18,7 @@ exports.saveTaskToDynamo = async (taskMetadata) => {
  * @param {string} user_id - ID of the task owner
  */
 exports.saveTaskToRDS = async (task_id, user_id) => {
-  const sql = `INSERT INTO task_user (task_id, user_id) VALUES (?, ?)`;
+  const sql = `INSERT INTO task_user (task_id, user_id) VALUES ($1, $2)`;
   return await insertTaskRelation(sql, [task_id, user_id]);
 };
 
@@ -29,8 +29,9 @@ exports.saveTaskToRDS = async (task_id, user_id) => {
  */
 exports.uploadFileToS3 = async (file, task_id) => {
   const key = `attachments/${task_id}/${file.name}`;
-  const result = await putObject("your-bucket-name", key, file.content); // Adjust bucket name
-  return { url: `https://your-bucket-name.s3.amazonaws.com/${key}` };
+  const bucket = process.env.S3_BUCKET_NAME || "task-attachments-bucket1";
+  const result = await putObject(bucket, key, file.content);
+  return { url: `https://${bucket}.s3.amazonaws.com/${key}` };
 };
 
 /**
@@ -38,5 +39,5 @@ exports.uploadFileToS3 = async (file, task_id) => {
  * @param {Object} msg - Message to send (task_id, user_id, etc.)
  */
 exports.sendMessageToQueue = async (msg) => {
-  return await sendToQueue("YourQueueURL", msg); // Replace with your actual SQS URL
+  return await sendToQueue(process.env.SQS_QUEUE_URL, msg); // Replace with your actual SQS URL
 };
