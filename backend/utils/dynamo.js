@@ -107,3 +107,19 @@ exports.getItem = async (tableName, task_id) => {
   }
 };
 
+// Retrieves all items from a DynamoDB table
+exports.scanItems = async (tableName) => {
+  const params = {
+    TableName: tableName
+  };
+
+  try {
+    const result = await dynamo.scan(params).promise();
+    return result.Items;
+  } catch (error) {
+    console.error("DynamoDB scan error:", error);
+    throw new Error("Failed to scan items from DynamoDB");
+  }
+};
+
+
